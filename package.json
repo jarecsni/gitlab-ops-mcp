@@ -1,0 +1,37 @@
+{
+  "name": "gitlab-ops-mcp",
+  "version": "0.0.0",
+  "description": "Supplementary MCP server for GitLab operational tools — webhooks, CI/CD variables, protected branches, project settings, groups, access tokens, and pipeline triggers",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "gitlab-ops-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest --run"
+  },
+  "keywords": [
+    "mcp",
+    "gitlab",
+    "devops",
+    "webhooks",
+    "ci-cd"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "fast-check": "^4.5.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

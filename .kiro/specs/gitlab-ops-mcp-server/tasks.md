@@ -7,12 +7,12 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
 ## Tasks
 
 - [ ] 1. Project scaffolding and core infrastructure
-  - [ ] 1.1 Initialise the project with package.json, tsconfig.json, and install dependencies (`@modelcontextprotocol/sdk`, `typescript`, `vitest`, `fast-check`)
+  - [x] 1.1 Initialise the project with package.json, tsconfig.json, and install dependencies (`@modelcontextprotocol/sdk`, `typescript`, `vitest`, `fast-check`)
     - Create `package.json` with name `gitlab-ops-mcp`, bin entry, and scripts (build, test)
     - Create `tsconfig.json` targeting ES2022 with Node module resolution
     - Create `src/` and `tests/` directory structure
     - _Requirements: 1.4_
-  - [ ] 1.2 Implement error classes in `src/errors.ts`
+  - [x] 1.2 Implement error classes in `src/errors.ts`
     - `GitLabApiError` with `statusCode` and `gitlabMessage`
     - `GitLabConnectionError` with `cause`
     - `ValidationError` with `paramName`
