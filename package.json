@@ -12,6 +12,8 @@
   ],
   "scripts": {
     "build": "tsc",
+    "start": "node dist/server.js",
+    "start:stdio": "node dist/index.js",
     "test": "vitest --run",
     "prepublishOnly": "npm run build"
   },
@@ -27,9 +29,11 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.26.0"
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "express": "^5.2.1"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^25.3.0",
     "fast-check": "^4.5.3",
     "typescript": "^5.9.3",
