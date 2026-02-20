@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",

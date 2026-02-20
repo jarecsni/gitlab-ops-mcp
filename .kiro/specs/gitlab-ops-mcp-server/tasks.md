@@ -6,7 +6,7 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
 
 ## Tasks
 
-- [ ] 1. Project scaffolding and core infrastructure
+- [x] 1. Project scaffolding and core infrastructure
   - [x] 1.1 Initialise the project with package.json, tsconfig.json, and install dependencies (`@modelcontextprotocol/sdk`, `typescript`, `vitest`, `fast-check`)
     - Create `package.json` with name `gitlab-ops-mcp`, bin entry, and scripts (build, test)
     - Create `tsconfig.json` targeting ES2022 with Node module resolution
@@ -17,12 +17,12 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
     - `GitLabConnectionError` with `cause`
     - `ValidationError` with `paramName`
     - _Requirements: 9.1, 9.2, 9.3_
-  - [ ] 1.3 Implement the GitLab API client in `src/gitlab-client.ts`
+  - [x] 1.3 Implement the GitLab API client in `src/gitlab-client.ts`
     - `get`, `post`, `put`, `delete` methods wrapping `fetch`
     - Prepend base URL, attach `PRIVATE-TOKEN` header
     - Throw `GitLabApiError` on non-2xx, `GitLabConnectionError` on network failure
     - _Requirements: 1.5, 9.1, 9.3_
-  - [ ] 1.4 Implement validation utilities in `src/validation.ts`
+  - [x] 1.4 Implement validation utilities in `src/validation.ts`
     - `requireString`, `requireNumber`, `optionalString`, `optionalNumber`, `optionalBoolean`, `requireEnum`, `optionalEnum`, `optionalStringArray`
     - Each throws `ValidationError` with descriptive message on failure
     - _Requirements: 10.1_
@@ -37,8 +37,8 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
     - Test base URL prepending
     - _Requirements: 1.5, 9.1, 9.3_
 
-- [ ] 2. Webhook tool handlers
-  - [ ] 2.1 Implement webhook handlers in `src/tools/webhooks.ts`
+- [x] 2. Webhook tool handlers
+  - [x] 2.1 Implement webhook handlers in `src/tools/webhooks.ts`
     - `create_webhook`, `list_webhooks`, `update_webhook`, `delete_webhook`, `test_webhook`
     - Each validates inputs, builds API path, calls client, returns MCP text content
     - Export `registerWebhookTools(server, client)` function
@@ -48,8 +48,8 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
     - Test correct API path construction with various project_id and hook_id values
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 3. CI/CD variable tool handlers
-  - [ ] 3.1 Implement CI variable handlers in `src/tools/ci-variables.ts`
+- [x] 3. CI/CD variable tool handlers
+  - [x] 3.1 Implement CI variable handlers in `src/tools/ci-variables.ts`
     - `create_ci_variable`, `list_ci_variables`, `update_ci_variable`, `delete_ci_variable`
     - Validate `variable_type` enum when provided
     - Export `registerCiVariableTools(server, client)` function
@@ -59,12 +59,12 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
     - Test `variable_type` enum validation rejects invalid values
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 10.2_
 
-- [ ] 4. Protected branch and project settings tool handlers
-  - [ ] 4.1 Implement protected branch handlers in `src/tools/protected-branches.ts`
+- [x] 4. Protected branch and project settings tool handlers
+  - [x] 4.1 Implement protected branch handlers in `src/tools/protected-branches.ts`
     - `protect_branch`, `list_protected_branches`, `unprotect_branch`
     - Export `registerProtectedBranchTools(server, client)` function
     - _Requirements: 4.1, 4.2, 4.3_
-  - [ ] 4.2 Implement project settings handler in `src/tools/project-settings.ts`
+  - [x] 4.2 Implement project settings handler in `src/tools/project-settings.ts`
     - `update_project_settings` with enum validation for `merge_method` and `squash_option`
     - Export `registerProjectSettingsTools(server, client)` function
     - _Requirements: 5.1, 10.4, 10.5_
@@ -73,20 +73,20 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
     - Test `merge_method` and `squash_option` enum validation
     - _Requirements: 4.1, 4.2, 4.3, 5.1, 10.4, 10.5_
 
-- [ ] 5. Checkpoint
+- [x] 5. Checkpoint
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 6. Group, access token, and pipeline trigger tool handlers
-  - [ ] 6.1 Implement group handlers in `src/tools/groups.ts`
+- [x] 6. Group, access token, and pipeline trigger tool handlers
+  - [x] 6.1 Implement group handlers in `src/tools/groups.ts`
     - `create_group`, `list_groups`, `delete_group`
     - Validate `visibility` enum when provided
     - Export `registerGroupTools(server, client)` function
     - _Requirements: 6.1, 6.2, 6.3, 10.3_
-  - [ ] 6.2 Implement access token handlers in `src/tools/access-tokens.ts`
+  - [x] 6.2 Implement access token handlers in `src/tools/access-tokens.ts`
     - `create_project_access_token`, `list_project_access_tokens`, `revoke_project_access_token`
     - Export `registerAccessTokenTools(server, client)` function
     - _Requirements: 7.1, 7.2, 7.3_
-  - [ ] 6.3 Implement pipeline trigger handlers in `src/tools/pipeline-triggers.ts`
+  - [x] 6.3 Implement pipeline trigger handlers in `src/tools/pipeline-triggers.ts`
     - `create_pipeline_trigger`, `list_pipeline_triggers`, `delete_pipeline_trigger`
     - Export `registerPipelineTriggerTools(server, client)` function
     - _Requirements: 8.1, 8.2, 8.3_
@@ -95,11 +95,11 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
     - Test correct API paths for all three domains
     - _Requirements: 6.1, 6.2, 6.3, 7.1, 7.2, 7.3, 8.1, 8.2, 8.3, 10.3_
 
-- [ ] 7. Server entry point and tool registration
-  - [ ] 7.1 Implement tool registration index in `src/tools/index.ts`
+- [x] 7. Server entry point and tool registration
+  - [x] 7.1 Implement tool registration index in `src/tools/index.ts`
     - `registerAllTools(server, client)` calling all domain register functions
     - _Requirements: 1.4_
-  - [ ] 7.2 Implement server entry point in `src/index.ts`
+  - [x] 7.2 Implement server entry point in `src/index.ts`
     - Read env vars, validate token presence, default API URL
     - Create `GitLabApiClient`, create MCP `Server`, register all tools, connect via `StdioServerTransport`
     - Add shebang for npx execution
@@ -132,18 +132,18 @@ Incremental build of the gitlab-ops-mcp server. Start with project scaffolding a
     - Generate random HTTP error statuses and messages, verify MCP error response contains both
     - **Validates: Requirements 9.1**
 
-- [ ] 9. Final wiring and npm packaging
-  - [ ] 9.1 Configure `package.json` for npm publishing
+- [x] 9. Final wiring and npm packaging
+  - [x] 9.1 Configure `package.json` for npm publishing
     - Set `bin` field pointing to `dist/index.js`
     - Set `files` to include `dist/`
     - Add `prepublishOnly` script that builds
     - _Requirements: 1.4_
-  - [ ] 9.2 Add README with configuration example and tool catalogue
+  - [x] 9.2 Add README with configuration example and tool catalogue
     - MCP client configuration JSON
     - List of all 21 tools with brief descriptions
     - _Requirements: 1.1_
 
-- [ ] 10. Final checkpoint
+- [x] 10. Final checkpoint
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes
