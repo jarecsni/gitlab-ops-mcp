@@ -33,7 +33,7 @@ export function registerProtectedBranchTools(server: McpServer, client: GitLabAp
   // protect_branch
   server.tool(
     'protect_branch',
-    'Protect a branch with optional access level restrictions',
+    'Protect a branch (or wildcard pattern) with configurable push/merge access levels and force-push settings to enforce merge-only workflows',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       name: z.string().describe('The name of the branch or wildcard pattern to protect'),
@@ -62,7 +62,7 @@ export function registerProtectedBranchTools(server: McpServer, client: GitLabAp
   // list_protected_branches
   server.tool(
     'list_protected_branches',
-    'List all protected branches for a project',
+    'List all protected branches for a project, including their push/merge access levels and force-push settings',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
     },
@@ -81,7 +81,7 @@ export function registerProtectedBranchTools(server: McpServer, client: GitLabAp
   // unprotect_branch
   server.tool(
     'unprotect_branch',
-    'Remove protection from a branch',
+    'Remove protection rules from a branch, restoring default push and merge permissions',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       name: z.string().describe('The name of the branch to unprotect'),

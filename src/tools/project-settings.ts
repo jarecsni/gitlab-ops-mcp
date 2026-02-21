@@ -32,7 +32,7 @@ function handleError(error: unknown) {
 export function registerProjectSettingsTools(server: McpServer, client: GitLabApiClient): void {
   server.tool(
     'update_project_settings',
-    'Update project-level settings such as merge strategy, pipeline requirements, and housekeeping options',
+    'Update project-level settings: merge strategy (merge/rebase/fast-forward), squash policy, pipeline requirements, source branch cleanup, Auto DevOps, shared runners, and container registry',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       merge_method: z.enum(['merge', 'rebase_merge', 'ff']).optional().describe('Merge method: merge, rebase_merge, or ff'),

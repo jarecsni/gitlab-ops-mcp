@@ -33,7 +33,7 @@ export function registerGroupTools(server: McpServer, client: GitLabApiClient): 
   // create_group
   server.tool(
     'create_group',
-    'Create a new GitLab group or subgroup',
+    'Create a new GitLab group or subgroup with configurable visibility and description for namespace isolation',
     {
       name: z.string().describe('The name of the group'),
       path: z.string().describe('The URL-friendly path of the group'),
@@ -59,7 +59,7 @@ export function registerGroupTools(server: McpServer, client: GitLabApiClient): 
   // list_groups
   server.tool(
     'list_groups',
-    'List GitLab groups with optional filters',
+    'List GitLab groups with optional search, ownership, and minimum access level filters',
     {
       search: z.string().optional().describe('Search term to filter groups by name'),
       owned: z.boolean().optional().describe('Limit to groups owned by the current user'),
@@ -83,7 +83,7 @@ export function registerGroupTools(server: McpServer, client: GitLabApiClient): 
   // delete_group
   server.tool(
     'delete_group',
-    'Delete a GitLab group',
+    'Delete a GitLab group and all projects within it (cascading delete)',
     {
       group_id: z.number().describe('The ID of the group to delete'),
     },

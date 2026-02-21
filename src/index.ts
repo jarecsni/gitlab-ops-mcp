@@ -17,7 +17,10 @@ async function main() {
 
   const server = new McpServer({
     name: 'gitlab-ops-mcp',
-    version: '0.0.0',
+    title: 'GitLab Ops MCP',
+    version: '1.0.2',
+    description: 'The operational layer for GitLab that the standard MCP doesn\'t cover. 21 tools across 7 domains: webhooks, CI/CD variables, branch protection, project settings, groups, access tokens, and pipeline triggers. Designed for automated multi-repo project setup and delivery orchestration.',
+    websiteUrl: 'https://github.com/jarecsni/gitlab-ops-mcp',
   })
 
   registerAllTools(server, client)

@@ -33,7 +33,7 @@ export function registerPipelineTriggerTools(server: McpServer, client: GitLabAp
   // create_pipeline_trigger
   server.tool(
     'create_pipeline_trigger',
-    'Create a pipeline trigger token for a project',
+    'Create a pipeline trigger token for cross-project pipeline triggering via the GitLab API',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       description: z.string().describe('Description of the trigger token'),
@@ -54,7 +54,7 @@ export function registerPipelineTriggerTools(server: McpServer, client: GitLabAp
   // list_pipeline_triggers
   server.tool(
     'list_pipeline_triggers',
-    'List all pipeline trigger tokens for a project',
+    'List all pipeline trigger tokens for a project, including their descriptions and ownership',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
     },
@@ -73,7 +73,7 @@ export function registerPipelineTriggerTools(server: McpServer, client: GitLabAp
   // delete_pipeline_trigger
   server.tool(
     'delete_pipeline_trigger',
-    'Delete a pipeline trigger token',
+    'Remove a pipeline trigger token, preventing any further pipeline triggers using it',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       trigger_id: z.number().describe('The ID of the trigger token to delete'),

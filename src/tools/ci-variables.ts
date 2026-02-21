@@ -33,7 +33,7 @@ export function registerCiVariableTools(server: McpServer, client: GitLabApiClie
   // create_ci_variable
   server.tool(
     'create_ci_variable',
-    'Create a project-level CI/CD variable',
+    'Create a project-level CI/CD variable with optional protection (only exposed to protected branches), masking (hidden in job logs), environment scoping, and file type support',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       key: z.string().describe('The key of the variable'),
@@ -62,7 +62,7 @@ export function registerCiVariableTools(server: McpServer, client: GitLabApiClie
   // list_ci_variables
   server.tool(
     'list_ci_variables',
-    'List all CI/CD variables for a project',
+    'List all CI/CD variables for a project, including their keys, protection status, masking, and environment scopes',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
     },
@@ -79,7 +79,7 @@ export function registerCiVariableTools(server: McpServer, client: GitLabApiClie
   // update_ci_variable
   server.tool(
     'update_ci_variable',
-    'Update an existing project CI/CD variable',
+    'Update an existing CI/CD variable\'s value, protection, masking, environment scope, or type',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       key: z.string().describe('The key of the variable to update'),
@@ -111,7 +111,7 @@ export function registerCiVariableTools(server: McpServer, client: GitLabApiClie
   // delete_ci_variable
   server.tool(
     'delete_ci_variable',
-    'Delete a project CI/CD variable',
+    'Remove a CI/CD variable from a project by key',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       key: z.string().describe('The key of the variable to delete'),

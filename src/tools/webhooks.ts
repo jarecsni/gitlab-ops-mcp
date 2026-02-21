@@ -33,7 +33,7 @@ export function registerWebhookTools(server: McpServer, client: GitLabApiClient)
   // create_webhook
   server.tool(
     'create_webhook',
-    'Create a project-level webhook that fires on specified events',
+    'Create a project-level webhook with configurable event subscriptions (push, tag, MR, pipeline, etc.) and optional secret token verification',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       url: z.string().describe('The webhook URL'),
@@ -73,7 +73,7 @@ export function registerWebhookTools(server: McpServer, client: GitLabApiClient)
   // list_webhooks
   server.tool(
     'list_webhooks',
-    'List all webhooks for a project',
+    'List all webhooks configured on a GitLab project, including their URLs, event subscriptions, and SSL verification status',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
     },
@@ -90,7 +90,7 @@ export function registerWebhookTools(server: McpServer, client: GitLabApiClient)
   // update_webhook
   server.tool(
     'update_webhook',
-    'Update an existing project webhook',
+    'Update an existing webhook\'s URL, secret token, event subscriptions, or SSL settings',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       hook_id: z.number().describe('The ID of the webhook to update'),
@@ -135,7 +135,7 @@ export function registerWebhookTools(server: McpServer, client: GitLabApiClient)
   // delete_webhook
   server.tool(
     'delete_webhook',
-    'Delete a project webhook',
+    'Remove a webhook from a GitLab project',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       hook_id: z.number().describe('The ID of the webhook to delete'),
@@ -153,7 +153,7 @@ export function registerWebhookTools(server: McpServer, client: GitLabApiClient)
   // test_webhook
   server.tool(
     'test_webhook',
-    'Test a project webhook by sending a test event',
+    'Trigger a test event (push, tag_push, etc.) against a webhook to verify it is receiving and processing events correctly',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       hook_id: z.number().describe('The ID of the webhook to test'),

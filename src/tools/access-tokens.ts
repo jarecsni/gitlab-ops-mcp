@@ -33,7 +33,7 @@ export function registerAccessTokenTools(server: McpServer, client: GitLabApiCli
   // create_project_access_token
   server.tool(
     'create_project_access_token',
-    'Create a scoped access token for a project',
+    'Create a scoped, rotatable access token for a project with configurable scopes (api, read_api, read/write_repository, read/write_registry), access level, and expiry date',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       name: z.string().describe('The name of the access token'),
@@ -64,7 +64,7 @@ export function registerAccessTokenTools(server: McpServer, client: GitLabApiCli
   // list_project_access_tokens
   server.tool(
     'list_project_access_tokens',
-    'List all access tokens for a project',
+    'List all access tokens for a project, including their scopes, access levels, and expiry dates',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
     },
@@ -83,7 +83,7 @@ export function registerAccessTokenTools(server: McpServer, client: GitLabApiCli
   // revoke_project_access_token
   server.tool(
     'revoke_project_access_token',
-    'Revoke a project access token',
+    'Revoke a project access token, immediately invalidating it for all future API requests',
     {
       project_id: z.string().describe('Project ID or URL-encoded path'),
       token_id: z.number().describe('The ID of the access token to revoke'),
