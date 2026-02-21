@@ -37,7 +37,7 @@ describe('Server initialisation', () => {
       }
     })
 
-    it('missing token produces error and exits', async () => {
+    it('missing token skips server startup silently', async () => {
       delete process.env.GITLAB_PERSONAL_ACCESS_TOKEN
       delete process.env.GITLAB_API_URL
 
@@ -45,15 +45,12 @@ describe('Server initialisation', () => {
       const mockError = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       // Dynamically import the entry point so env vars are read fresh.
-      // main() is async so we need to let the microtask queue flush.
+      // Without a token, main() should not run (Smithery scan compatibility).
       await import('../src/index.js?missing-token=' + Date.now())
-      // Allow the main() promise chain to settle
       await new Promise((r) => setTimeout(r, 50))
 
-      expect(mockError).toHaveBeenCalledWith(
-        'Error: GITLAB_PERSONAL_ACCESS_TOKEN environment variable is required',
-      )
-      expect(mockExit).toHaveBeenCalledWith(1)
+      expect(mockExit).not.toHaveBeenCalled()
+      expect(mockError).not.toHaveBeenCalled()
 
       mockExit.mockRestore()
       mockError.mockRestore()

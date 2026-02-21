@@ -1,4 +1,10 @@
 # Changelog
+## [1.0.1] - 2026-02-21
+
+### Fixed
+- Wrapped top-level `await` in `async main()` for Smithery esbuild CJS bundler compatibility
+- Added `.smithery/` to `.gitignore`
+
 ## [1.0.0] - 2026-02-21
 
 ### Added

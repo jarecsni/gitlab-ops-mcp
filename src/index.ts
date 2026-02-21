@@ -24,12 +24,7 @@ export const configSchema = {
 }
 
 async function main() {
-  const token = process.env.GITLAB_PERSONAL_ACCESS_TOKEN
-  if (!token) {
-    console.error('Error: GITLAB_PERSONAL_ACCESS_TOKEN environment variable is required')
-    process.exit(1)
-  }
-
+  const token = process.env.GITLAB_PERSONAL_ACCESS_TOKEN!
   const apiUrl = process.env.GITLAB_API_URL ?? 'https://gitlab.com/api/v4'
 
   const client = createGitLabClient(apiUrl, token)
@@ -45,7 +40,12 @@ async function main() {
   await server.connect(transport)
 }
 
-main().catch((err) => {
-  console.error('Fatal error:', err)
-  process.exit(1)
-})
+// Auto-run when a token is available (i.e. normal CLI / MCP client usage).
+// When Smithery imports this module to scan configSchema, no token is set
+// and main() is skipped — exactly what we want.
+if (process.env.GITLAB_PERSONAL_ACCESS_TOKEN) {
+  main().catch((err) => {
+    console.error('Fatal error:', err)
+    process.exit(1)
+  })
+}
