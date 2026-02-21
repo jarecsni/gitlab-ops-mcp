@@ -2,47 +2,54 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
+import { z } from 'zod'
 import { createGitLabClient } from './gitlab-client.js'
 import { registerAllTools } from './tools/index.js'
 
-// Smithery session configuration schema — tells Smithery what config to
-// collect from users when they connect to this server.
-export const configSchema = {
-  type: 'object' as const,
-  required: ['gitlabPersonalAccessToken'],
-  properties: {
-    gitlabPersonalAccessToken: {
-      type: 'string' as const,
-      description: 'GitLab Personal Access Token for API authentication',
-    },
-    gitlabApiUrl: {
-      type: 'string' as const,
-      default: 'https://gitlab.com/api/v4',
-      description: 'GitLab API base URL (defaults to gitlab.com)',
-    },
-  },
+// ---------------------------------------------------------------------------
+// Smithery integration
+// ---------------------------------------------------------------------------
+
+// Zod config schema — Smithery reads this to know what to collect from users.
+export const configSchema = z.object({
+  gitlabPersonalAccessToken: z.string().describe('GitLab Personal Access Token for API authentication'),
+  gitlabApiUrl: z.string().default('https://gitlab.com/api/v4').describe('GitLab API base URL (defaults to gitlab.com)'),
+})
+
+// Default export — Smithery's hosted runtime calls this to create a server.
+export default function createServer(config: z.infer<typeof configSchema>) {
+  const client = createGitLabClient(config.gitlabApiUrl, config.gitlabPersonalAccessToken)
+  const server = new McpServer({ name: 'gitlab-ops-mcp', version: '0.0.0' })
+  registerAllTools(server, client)
+  return server
 }
+
+// Sandbox server — lets Smithery scan tools without real credentials.
+export function createSandboxServer() {
+  return createServer({
+    gitlabPersonalAccessToken: 'sandbox-token',
+    gitlabApiUrl: 'https://gitlab.com/api/v4',
+  })
+}
+
+// ---------------------------------------------------------------------------
+// Stdio entry point (npx / local usage)
+// ---------------------------------------------------------------------------
 
 async function main() {
   const token = process.env.GITLAB_PERSONAL_ACCESS_TOKEN!
   const apiUrl = process.env.GITLAB_API_URL ?? 'https://gitlab.com/api/v4'
 
-  const client = createGitLabClient(apiUrl, token)
-
-  const server = new McpServer({
-    name: 'gitlab-ops-mcp',
-    version: '0.0.0',
+  const server = createServer({
+    gitlabPersonalAccessToken: token,
+    gitlabApiUrl: apiUrl,
   })
-
-  registerAllTools(server, client)
 
   const transport = new StdioServerTransport()
   await server.connect(transport)
 }
 
-// Auto-run when a token is available (i.e. normal CLI / MCP client usage).
-// When Smithery imports this module to scan configSchema, no token is set
-// and main() is skipped — exactly what we want.
+// Only run stdio when a token is present (skipped during Smithery scan).
 if (process.env.GITLAB_PERSONAL_ACCESS_TOKEN) {
   main().catch((err) => {
     console.error('Fatal error:', err)
