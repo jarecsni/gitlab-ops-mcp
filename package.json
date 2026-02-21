@@ -10,11 +10,18 @@
   "files": [
     "dist/"
   ],
+  "author": "Janos Aresz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jarecsni/gitlab-ops-mcp.git"
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "node scripts/generate-build-info.js && tsc",
     "start": "node dist/server.js",
     "start:stdio": "node dist/index.js",
     "test": "vitest --run",
+    "release": "node scripts/release.js",
+    "generate-build-info": "node scripts/generate-build-info.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

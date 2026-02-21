@@ -5,6 +5,24 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { createGitLabClient } from './gitlab-client.js'
 import { registerAllTools } from './tools/index.js'
 
+// Smithery session configuration schema — tells Smithery what config to
+// collect from users when they connect to this server.
+export const configSchema = {
+  type: 'object' as const,
+  required: ['gitlabPersonalAccessToken'],
+  properties: {
+    gitlabPersonalAccessToken: {
+      type: 'string' as const,
+      description: 'GitLab Personal Access Token for API authentication',
+    },
+    gitlabApiUrl: {
+      type: 'string' as const,
+      default: 'https://gitlab.com/api/v4',
+      description: 'GitLab API base URL (defaults to gitlab.com)',
+    },
+  },
+}
+
 const token = process.env.GITLAB_PERSONAL_ACCESS_TOKEN
 if (!token) {
   console.error('Error: GITLAB_PERSONAL_ACCESS_TOKEN environment variable is required')
