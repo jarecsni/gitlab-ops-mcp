@@ -1,6 +1,6 @@
 {
   "name": "gitlab-ops-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Supplementary MCP server for GitLab operational tools — webhooks, CI/CD variables, protected branches, project settings, groups, access tokens, and pipeline triggers",
   "type": "module",
   "main": "dist/index.js",

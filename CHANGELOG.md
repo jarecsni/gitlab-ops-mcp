@@ -1,4 +1,9 @@
 # Changelog
+## [1.0.2] - 2026-02-21
+
+### Fixed
+- Guard `main()` with token check so Smithery scanner can import `configSchema` without crashing
+
 ## [1.0.1] - 2026-02-21
 
 ### Fixed
