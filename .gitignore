@@ -3,3 +3,4 @@ dist/
 .env
 *.tgz
 src/build-info.ts
+.smithery/

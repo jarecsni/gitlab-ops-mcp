@@ -41,15 +41,14 @@ describe('Server initialisation', () => {
       delete process.env.GITLAB_PERSONAL_ACCESS_TOKEN
       delete process.env.GITLAB_API_URL
 
-      const mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {
-        throw new Error('process.exit called')
-      })
+      const mockExit = vi.spyOn(process, 'exit').mockImplementation((() => {}) as never)
       const mockError = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-      // Dynamically import the entry point so env vars are read fresh
-      await expect(async () => {
-        await import('../src/index.js?missing-token=' + Date.now())
-      }).rejects.toThrow('process.exit called')
+      // Dynamically import the entry point so env vars are read fresh.
+      // main() is async so we need to let the microtask queue flush.
+      await import('../src/index.js?missing-token=' + Date.now())
+      // Allow the main() promise chain to settle
+      await new Promise((r) => setTimeout(r, 50))
 
       expect(mockError).toHaveBeenCalledWith(
         'Error: GITLAB_PERSONAL_ACCESS_TOKEN environment variable is required',
