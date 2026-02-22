@@ -38,6 +38,16 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', name: 'gitlab-ops-mcp', transport: 'streamable-http' })
 })
 
+// OAuth discovery — tell scanners this server uses header-based auth, not OAuth
+app.get('/.well-known/oauth-protected-resource', (_req, res) => {
+  res.status(404).json({ error: 'not_supported', error_description: 'This server uses header-based authentication (PRIVATE-TOKEN), not OAuth' })
+})
+
+// Reject OAuth Dynamic Client Registration with proper JSON
+app.post('/register', (_req, res) => {
+  res.status(404).json({ error: 'registration_not_supported', error_description: 'This server does not support OAuth Dynamic Client Registration. Use PRIVATE-TOKEN header authentication.' })
+})
+
 // Static MCP server card for registry scanners (Smithery, etc.)
 app.get('/.well-known/mcp/server-card.json', (_req, res) => {
   res.json({
