@@ -17,9 +17,9 @@ const transports: Record<string, StreamableHTTPServerTransport> = {}
 // GitLab tokens keyed by session ID (extracted from init request)
 const sessionTokens: Record<string, string> = {}
 
-function createMcpServerWithToken(gitlabToken: string): McpServer {
-  const apiUrl = process.env.GITLAB_API_URL ?? 'https://gitlab.com/api/v4'
-  const client = createGitLabClient(apiUrl, gitlabToken)
+function createMcpServerWithToken(gitlabToken: string, apiUrl?: string): McpServer {
+  const resolvedApiUrl = apiUrl || process.env.GITLAB_API_URL || 'https://gitlab.com/api/v4'
+  const client = createGitLabClient(resolvedApiUrl, gitlabToken)
 
   const server = new McpServer({
     name: 'gitlab-ops-mcp',
@@ -99,8 +99,9 @@ app.post('/mcp', async (req, res) => {
     // Reuse existing session
     transport = transports[sessionId]
   } else if (!sessionId && isInitializeRequest(req.body)) {
-    // New session — extract GitLab token from header
+    // New session — extract GitLab token and optional API URL from headers
     const gitlabToken = req.headers['x-gitlab-token'] as string | undefined
+    const gitlabApiUrl = req.headers['x-gitlab-api-url'] as string | undefined
     if (!gitlabToken) {
       res.status(401).json({
         jsonrpc: '2.0',
@@ -128,7 +129,7 @@ app.post('/mcp', async (req, res) => {
       }
     }
 
-    const server = createMcpServerWithToken(gitlabToken)
+    const server = createMcpServerWithToken(gitlabToken, gitlabApiUrl)
     await server.connect(transport)
   } else {
     res.status(400).json({
