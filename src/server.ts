@@ -43,9 +43,17 @@ app.get('/.well-known/oauth-protected-resource', (_req, res) => {
   res.status(404).json({ error: 'not_supported', error_description: 'This server uses header-based authentication (PRIVATE-TOKEN), not OAuth' })
 })
 
-// Reject OAuth Dynamic Client Registration with proper JSON
-app.post('/register', (_req, res) => {
-  res.status(404).json({ error: 'registration_not_supported', error_description: 'This server does not support OAuth Dynamic Client Registration. Use PRIVATE-TOKEN header authentication.' })
+// Satisfy OAuth Dynamic Client Registration probes (Smithery scanner requires this)
+app.post('/register', (req, res) => {
+  const body = req.body || {}
+  res.status(201).json({
+    client_id: 'gitlab-ops-mcp-static-client',
+    client_name: body.client_name || 'gitlab-ops-mcp-client',
+    redirect_uris: body.redirect_uris || [],
+    grant_types: body.grant_types || ['authorization_code'],
+    response_types: body.response_types || ['code'],
+    token_endpoint_auth_method: 'none',
+  })
 })
 
 // Static MCP server card for registry scanners (Smithery, etc.)
