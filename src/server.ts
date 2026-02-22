@@ -44,7 +44,8 @@ app.get('/.well-known/oauth-protected-resource', (_req, res) => {
 })
 
 // Satisfy OAuth Dynamic Client Registration probes (Smithery scanner requires this)
-app.post('/register', (req, res) => {
+// Handle both GET and POST — Smithery's scanner may use either method
+function handleRegister(req: express.Request, res: express.Response) {
   const body = req.body || {}
   res.status(201).json({
     client_id: 'gitlab-ops-mcp-static-client',
@@ -54,7 +55,9 @@ app.post('/register', (req, res) => {
     response_types: body.response_types || ['code'],
     token_endpoint_auth_method: 'none',
   })
-})
+}
+app.get('/register', handleRegister)
+app.post('/register', handleRegister)
 
 // OAuth metadata — point scanners at our fake authorize/token endpoints
 app.get('/.well-known/oauth-authorization-server', (_req, res) => {
@@ -85,13 +88,16 @@ app.get('/authorize', (req, res) => {
 })
 
 // Fake token exchange — return a dummy access token
-app.post('/token', (_req, res) => {
+// Handle both GET and POST — Smithery's callback may use either method
+function handleToken(_req: express.Request, res: express.Response) {
   res.json({
     access_token: 'gitlab-ops-mcp-dummy-token',
     token_type: 'Bearer',
     expires_in: 3600,
   })
-})
+}
+app.get('/token', handleToken)
+app.post('/token', handleToken)
 
 // Static MCP server card for registry scanners (Smithery, etc.)
 app.get('/.well-known/mcp/server-card.json', (_req, res) => {
@@ -144,9 +150,16 @@ app.post('/mcp', async (req, res) => {
     // Reuse existing session
     transport = transports[sessionId]
   } else if (!sessionId && isInitializeRequest(req.body)) {
-    // New session — extract GitLab token and optional API URL from headers
-    const gitlabToken = req.headers['x-gitlab-token'] as string | undefined
+    // New session — extract GitLab token from X-GitLab-Token header or Authorization: Bearer fallback
     const gitlabApiUrl = req.headers['x-gitlab-api-url'] as string | undefined
+    let gitlabToken = req.headers['x-gitlab-token'] as string | undefined
+    if (!gitlabToken) {
+      // Fall back to Authorization: Bearer (used by Smithery scanner and OAuth-based clients)
+      const authHeader = req.headers['authorization'] as string | undefined
+      if (authHeader?.startsWith('Bearer ')) {
+        gitlabToken = authHeader.slice(7)
+      }
+    }
     if (!gitlabToken) {
       res.status(401).json({
         jsonrpc: '2.0',
