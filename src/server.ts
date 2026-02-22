@@ -38,6 +38,48 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', name: 'gitlab-ops-mcp', transport: 'streamable-http' })
 })
 
+// Static MCP server card for registry scanners (Smithery, etc.)
+app.get('/.well-known/mcp/server-card.json', (_req, res) => {
+  res.json({
+    name: 'gitlab-ops-mcp',
+    title: 'GitLab Ops MCP',
+    version: '1.0.2',
+    description: 'The operational layer for GitLab that the standard MCP doesn\'t cover. 21 tools across 7 domains: webhooks, CI/CD variables, branch protection, project settings, groups, access tokens, and pipeline triggers. Designed for automated multi-repo project setup and delivery orchestration.',
+    websiteUrl: 'https://github.com/jarecsni/gitlab-ops-mcp',
+    transport: 'streamable-http',
+    endpoint: '/mcp',
+    authentication: {
+      type: 'header',
+      header: 'X-GitLab-Token',
+      description: 'GitLab personal access token (glpat-...) with api scope',
+    },
+    tools: [
+      { name: 'create_webhook', description: 'Create a project-level webhook with configurable event subscriptions (push, tag, MR, pipeline, etc.) and optional secret token verification' },
+      { name: 'list_webhooks', description: 'List all webhooks configured on a GitLab project, including their URLs, event subscriptions, and SSL verification status' },
+      { name: 'update_webhook', description: 'Update an existing webhook\'s URL, secret token, event subscriptions, or SSL settings' },
+      { name: 'delete_webhook', description: 'Remove a webhook from a GitLab project' },
+      { name: 'test_webhook', description: 'Trigger a test event (push, tag_push, etc.) against a webhook to verify it is receiving and processing events correctly' },
+      { name: 'create_ci_variable', description: 'Create a project-level CI/CD variable with optional protection, masking, environment scoping, and file type support' },
+      { name: 'list_ci_variables', description: 'List all CI/CD variables for a project, including their keys, protection status, masking, and environment scopes' },
+      { name: 'update_ci_variable', description: 'Update an existing CI/CD variable\'s value, protection, masking, environment scope, or type' },
+      { name: 'delete_ci_variable', description: 'Remove a CI/CD variable from a project by key' },
+      { name: 'protect_branch', description: 'Protect a branch (or wildcard pattern) with configurable push/merge access levels and force-push settings' },
+      { name: 'list_protected_branches', description: 'List all protected branches for a project, including their push/merge access levels and force-push settings' },
+      { name: 'unprotect_branch', description: 'Remove protection rules from a branch, restoring default push and merge permissions' },
+      { name: 'update_project_settings', description: 'Update project-level settings: merge strategy, squash policy, pipeline requirements, source branch cleanup, Auto DevOps, shared runners, and container registry' },
+      { name: 'create_group', description: 'Create a new GitLab group or subgroup with configurable visibility and description for namespace isolation' },
+      { name: 'list_groups', description: 'List GitLab groups with optional search, ownership, and minimum access level filters' },
+      { name: 'delete_group', description: 'Delete a GitLab group and all projects within it (cascading delete)' },
+      { name: 'create_project_access_token', description: 'Create a scoped, rotatable access token for a project with configurable scopes, access level, and expiry date' },
+      { name: 'list_project_access_tokens', description: 'List all access tokens for a project, including their scopes, access levels, and expiry dates' },
+      { name: 'revoke_project_access_token', description: 'Revoke a project access token, immediately invalidating it for all future API requests' },
+      { name: 'create_pipeline_trigger', description: 'Create a pipeline trigger token for cross-project pipeline triggering via the GitLab API' },
+      { name: 'list_pipeline_triggers', description: 'List all pipeline trigger tokens for a project, including their descriptions and ownership' },
+      { name: 'delete_pipeline_trigger', description: 'Remove a pipeline trigger token, preventing any further pipeline triggers using it' },
+    ],
+  })
+})
+
 // Handle POST requests — client-to-server communication
 app.post('/mcp', async (req, res) => {
   const sessionId = req.headers['mcp-session-id'] as string | undefined
