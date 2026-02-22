@@ -56,6 +56,43 @@ app.post('/register', (req, res) => {
   })
 })
 
+// OAuth metadata — point scanners at our fake authorize/token endpoints
+app.get('/.well-known/oauth-authorization-server', (_req, res) => {
+  const base = `${_req.protocol}://${_req.get('host')}`
+  res.json({
+    issuer: base,
+    authorization_endpoint: `${base}/authorize`,
+    token_endpoint: `${base}/token`,
+    registration_endpoint: `${base}/register`,
+    response_types_supported: ['code'],
+    grant_types_supported: ['authorization_code'],
+    code_challenge_methods_supported: ['S256'],
+  })
+})
+
+// Fake authorize — redirect back with a dummy code
+app.get('/authorize', (req, res) => {
+  const redirectUri = req.query.redirect_uri as string
+  const state = req.query.state as string
+  if (redirectUri) {
+    const url = new URL(redirectUri)
+    url.searchParams.set('code', 'gitlab-ops-mcp-dummy-code')
+    if (state) url.searchParams.set('state', state)
+    res.redirect(url.toString())
+  } else {
+    res.status(400).json({ error: 'invalid_request', error_description: 'Missing redirect_uri' })
+  }
+})
+
+// Fake token exchange — return a dummy access token
+app.post('/token', (_req, res) => {
+  res.json({
+    access_token: 'gitlab-ops-mcp-dummy-token',
+    token_type: 'Bearer',
+    expires_in: 3600,
+  })
+})
+
 // Static MCP server card for registry scanners (Smithery, etc.)
 app.get('/.well-known/mcp/server-card.json', (_req, res) => {
   res.json({
