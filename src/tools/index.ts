@@ -7,6 +7,7 @@ import { registerProjectSettingsTools } from './project-settings.js'
 import { registerGroupTools } from './groups.js'
 import { registerAccessTokenTools } from './access-tokens.js'
 import { registerPipelineTriggerTools } from './pipeline-triggers.js'
+import { registerProjectTools } from './projects.js'
 
 export function registerAllTools(server: McpServer, client: GitLabApiClient): void {
   registerWebhookTools(server, client)
@@ -16,4 +17,5 @@ export function registerAllTools(server: McpServer, client: GitLabApiClient): vo
   registerGroupTools(server, client)
   registerAccessTokenTools(server, client)
   registerPipelineTriggerTools(server, client)
+  registerProjectTools(server, client)
 }

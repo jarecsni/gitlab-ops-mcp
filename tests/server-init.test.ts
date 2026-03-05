@@ -90,7 +90,7 @@ describe('Server initialisation', () => {
       await client.connect(clientTransport)
 
       const { tools } = await client.listTools()
-      expect(tools).toHaveLength(22)
+      expect(tools).toHaveLength(23)
     })
 
     it('registers all expected tool names', async () => {
@@ -111,6 +111,7 @@ describe('Server initialisation', () => {
         'create_ci_variable',
         'create_group',
         'create_pipeline_trigger',
+        'create_project',
         'create_project_access_token',
         'create_webhook',
         'delete_ci_variable',
