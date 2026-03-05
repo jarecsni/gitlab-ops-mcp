@@ -1,4 +1,20 @@
 # Changelog
+## [1.1.0] - 2026-03-05
+
+### Added
+- `create_project` tool with `namespace_id` support for creating projects inside groups
+- Server metadata endpoint, enriched tool descriptions, storefront discoverability
+- `.well-known/mcp/server-card.json` endpoint for registry discovery
+- `X-GitLab-Api-Url` header support for per-session API URL override
+
+### Fixed
+- OAuth discovery and `/register` endpoints for Smithery scanner compatibility
+- Bearer token fallback for Smithery scanner
+- GET handler on `/register` and `/token` routes
+
+### Removed
+- Smithery-specific exports and `smithery.yaml`
+
 ## [1.0.2] - 2026-02-21
 
 ### Fixed
